@@ -17,6 +17,6 @@ export interface LootboxInfo {
     id: number;
     name: string;
     image_url: string;
-    open_prise: number;
+    open_price: number;
     prizes: Array<Prize>;
 }

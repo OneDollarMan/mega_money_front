@@ -8,28 +8,55 @@ export default function LootboxModal(props: { selectedLootbox: LootboxInfo | nul
     }
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-            <div className="bg-gray-800 rounded-lg p-6 w-full max-w-md relative">
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 animate-fade-in">
+            <div className="bg-gray-800 rounded-lg p-8 w-full max-w-lg relative transform transition-all">
+                {/* Close Button */}
                 <button
                     onClick={props.closeModalFunc}
-                    className="absolute top-4 right-4 text-gray-300 hover:text-gray-100"
+                    className="absolute top-4 right-4 text-gray-300 hover:text-gray-100 transition-colors"
                 >
                     ✖
                 </button>
-                <h2 className="text-2xl font-bold text-green-500 mb-4">Lootbox {props.selectedLootbox.id}</h2>
 
-                <div className="bg-gray-700 h-40 rounded-lg mb-4 flex items-center justify-center">
-                    <span className="text-gray-400">Prize Wheel (Coming Soon)</span>
+                {/* Modal Header */}
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-teal-500 bg-clip-text text-transparent mb-6">
+                    Lootbox #{props.selectedLootbox.id}
+                </h2>
+
+                {/* Prize Wheel Section */}
+                <div className="bg-gray-700 h-48 rounded-lg mb-6 flex items-center justify-center overflow-hidden relative">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-gray-400 text-lg">Prize Wheel (Coming Soon)</span>
+                    </div>
+                    <div className="w-full h-full bg-gradient-to-r from-green-400/10 to-teal-500/10 animate-spin-slow"></div>
                 </div>
 
-                <OpenLootboxButton selectedLootboxId={props.selectedLootbox.id} />
+                {/* Open Lootbox Button */}
+                <div className="mb-6">
+                    <OpenLootboxButton selectedLootboxId={props.selectedLootbox.id} />
+                </div>
 
-                <div className="bg-gray-700 p-4 rounded-lg">
-                    <h3 className="text-lg font-bold text-white mb-2">Prizes:</h3>
-                    <ul className="text-gray-400">
-                        {props.selectedLootbox.prizes.length > 0 ? props.selectedLootbox.prizes.map((prize) => (
-                            <li key={prize.id}>[{prize.quality} - {prize.drop_chance * 100}%] {prize.name}</li>
-                        )) : <>No prizes</>}
+                {/* Prizes Section */}
+                <div className="bg-gray-700 p-6 rounded-lg">
+                    <h3 className="text-xl font-bold text-white mb-4">Prizes:</h3>
+                    <ul className="space-y-2">
+                        {props.selectedLootbox.prizes.length > 0 ? (
+                            props.selectedLootbox.prizes.map((prize) => (
+                                <li
+                                    key={prize.id}
+                                    className="flex justify-between items-center bg-gray-600 p-3 rounded-lg hover:bg-gray-500 transition-colors"
+                                >
+                                    <span className="text-gray-300">
+                                        {prize.name} <span className="text-green-400">({prize.quality})</span>
+                                    </span>
+                                    <span className="text-gray-400 text-sm">
+                                        {Math.round(prize.drop_chance * 100)}% chance
+                                    </span>
+                                </li>
+                            ))
+                        ) : (
+                            <li className="text-gray-400">No prizes available</li>
+                        )}
                     </ul>
                 </div>
             </div>
