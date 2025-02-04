@@ -4,8 +4,10 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 interface AuthContextProps {
     accessToken: string | null;
     walletAddress: string | null;
+    userBalance: string | null;
     login: (arg0: string, arg1: string) => void;
     logout: () => void;
+    refreshUserBalance: () => void;
 }
 
 interface AuthProviderProps {
@@ -17,6 +19,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [walletAddress, setWalletAddress] = useState<string | null>(null);
+    const [userBalance, setUserBalance] = useState<string | null>(null);
 
     useEffect(() => {
         const storedAccessToken = localStorage.getItem("accessToken");
@@ -28,7 +31,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (storedWalletAddress) {
             setWalletAddress(storedWalletAddress);
         }
-    });
+    }, []);
 
     const login = (token: string, wallet: string) => {
         setAccessToken(token);
@@ -44,10 +47,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
         setAccessToken(null);
         setWalletAddress(null);
+        setUserBalance(null);
+    };
+
+    const refreshUserBalance = async () => {
+        try {
+            const response = await fetch('http://localhost:8000/users/me', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch user data: ${response.statusText}`);
+            }
+
+            const userData = await response.json();
+            setUserBalance(userData.balance);
+        } catch (err) {
+            console.error("Error fetching user balance:", err);
+            logout();
+        }
     };
 
     return (
-        <AuthContext.Provider value={{ accessToken, walletAddress, login, logout }}>
+        <AuthContext.Provider value={{ accessToken, walletAddress, userBalance, login, logout, refreshUserBalance }}>
             {children}
         </AuthContext.Provider>
     );

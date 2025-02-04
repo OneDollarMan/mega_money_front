@@ -1,10 +1,16 @@
 "use client";
+import { Dispatch, SetStateAction } from "react";
 import { useAuth } from "./AuthContext";
+import { Prize } from "./Models";
 
-export default function OpenLootboxButton(props: { selectedLootboxId: number }) {
-    const { accessToken, logout } = useAuth();
+export default function OpenLootboxButton(props: { selectedLootboxId: number, setPrize: (newPrize: Prize) => void, setError: Dispatch<SetStateAction<string | undefined>> }) {
+    const { accessToken, logout, refreshUserBalance } = useAuth();
 
     const openLootbox = async () => {
+        if(!accessToken) {
+            return;
+        }
+
         const response = await fetch('http://localhost:8000/lootboxes/open', {
             method: 'POST',
             headers: {
@@ -18,16 +24,24 @@ export default function OpenLootboxButton(props: { selectedLootboxId: number }) 
             return;
         }
 
+        if (response.status == 400) {
+            props.setError((await response.json()).detail)
+            return;
+        }
+
         const resp_data = await response.json();
-        // Handle the response data (e.g., show the prize won)
+        props.setPrize(resp_data);
+        refreshUserBalance();
     };
 
     return (
         <button
-            className="w-full bg-gradient-to-r from-green-400 to-teal-500 text-white font-bold py-4 px-8 rounded-lg text-2xl hover:from-teal-500 hover:to-green-400 hover:shadow-2xl transform transition-all hover:scale-105 active:scale-95"
+            className={accessToken ? "w-full bg-gradient-to-r from-green-400 to-teal-500 text-white font-bold py-4 px-8 rounded-lg text-2xl hover:from-teal-500 hover:to-green-400 hover:shadow-2xl transform transition-all hover:scale-105 active:scale-95" 
+                : "w-full bg-gradient-to-r from-gray-700 to-zinc-600 text-white font-bold py-4 px-8 rounded-lg text-2xl"}
             onClick={openLootbox}
+            disabled={!accessToken}
         >
-            Open Lootbox
+            {accessToken ? 'Open lootbox' : 'Authorize first!'}
         </button>
     );
 }

@@ -1,5 +1,6 @@
 "use client";
-import { Suspense, use, useState } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import LootboxModal from "@/components/LootboxModal";
 import { LootboxInfo } from "./Models";
 
@@ -14,9 +15,7 @@ async function loadLootboxes() {
     return resp_data;
 }
 
-function Lootboxes({ dataPromise, openModal }: { dataPromise: Promise<Array<LootboxInfo>>, openModal: Function }) {
-    const lootboxesList: Array<LootboxInfo> = use(dataPromise);
-
+function Lootboxes({ lootboxesList, openModal }: { lootboxesList: Array<LootboxInfo>, openModal: (lootbox: LootboxInfo) => void }) {
     return (
         <>
             {lootboxesList.map((lootbox, index) => (
@@ -26,16 +25,19 @@ function Lootboxes({ dataPromise, openModal }: { dataPromise: Promise<Array<Loot
                     onClick={() => openModal(lootbox)}
                 >
                     <span className="text-lg font-semibold text-gray-300">{lootbox.name}</span>
-                    <div className="bg-gray-700 h-48 rounded-lg my-4 flex items-center justify-center overflow-hidden">
-                        <img
+                    <div className="bg-gray-700 h-48 rounded-lg my-4 flex items-center justify-center overflow-hidden relative">
+                        <Image
                             src={lootbox.image_url}
                             alt={lootbox.name}
-                            className="w-full h-full object-cover"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                            className="object-cover"
+                            priority
                         />
                     </div>
                     <button
                         onClick={(e) => {
-                            e.stopPropagation(); // Prevent the parent div's onClick from firing
+                            e.stopPropagation();
                             openModal(lootbox);
                         }}
                         className="bg-gradient-to-r from-green-400 to-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:from-teal-500 hover:to-green-400 transition-all"
@@ -51,6 +53,23 @@ function Lootboxes({ dataPromise, openModal }: { dataPromise: Promise<Array<Loot
 export default function LootboxList() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedLootbox, setSelectedLootbox] = useState<LootboxInfo | null>(null);
+    const [lootboxes, setLootboxes] = useState<Array<LootboxInfo>>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchLootboxes = async () => {
+            try {
+                const data = await loadLootboxes();
+                setLootboxes(data);
+            } catch (error) {
+                console.error("Failed to load lootboxes:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchLootboxes();
+    }, []); // Пустой массив зависимостей означает, что эффект выполнится только один раз при монтировании
 
     const openModal = (lootbox: LootboxInfo) => {
         setSelectedLootbox(lootbox);
@@ -69,13 +88,13 @@ export default function LootboxList() {
                     Lootboxes
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <Suspense fallback={
+                    {isLoading ? (
                         <div className="col-span-full text-center text-gray-400">
                             Loading lootboxes...
                         </div>
-                    }>
-                        <Lootboxes dataPromise={loadLootboxes()} openModal={openModal} />
-                    </Suspense>
+                    ) : (
+                        <Lootboxes lootboxesList={lootboxes} openModal={openModal} />
+                    )}
                 </div>
             </section>
             {isModalOpen && (
