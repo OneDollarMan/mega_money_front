@@ -1,5 +1,5 @@
 import { MouseEventHandler, useState, useEffect } from "react";
-import { LootboxInfo, Prize } from "./Models";
+import { LootboxInfo, Prize, PrizeTypeEnum } from "./Models";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Trophy } from "lucide-react";
 import OpenLootboxButton from "./OpenLootboxButton";
@@ -35,7 +35,7 @@ export default function LootboxModal(props: {
 
                 {/* Modal Header */}
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-teal-500 bg-clip-text text-transparent mb-6">
-                    Lootbox #{props.selectedLootbox.id}
+                    {props.selectedLootbox.name}
                 </h2>
 
                 {/* Prize Wheel Section */}
@@ -87,7 +87,8 @@ export default function LootboxModal(props: {
                                     transition={{ delay: 0.6 }}
                                     className="mt-2 text-sm text-gray-300"
                                 >
-                                    Quality: <span className="text-green-400 font-semibold">{prize?.quality}</span>
+                                    Quality: <span className="text-green-400 font-semibold">{prize?.quality}</span><br />
+                                    Prize amount: <span className="text-green-400 font-semibold">{prize?.tokens_amount}</span>
                                 </motion.div>
                             </motion.div>
                         )}
@@ -98,7 +99,8 @@ export default function LootboxModal(props: {
                 {/* Open Lootbox Button */}
                 <div className="mb-6">
                     <OpenLootboxButton 
-                        selectedLootboxId={props.selectedLootbox.id} 
+                        lootboxId={props.selectedLootbox.id} 
+                        lootboxPrice={props.selectedLootbox.open_price}
                         setPrize={(newPrize: Prize) => {
                             setShowPrizeReveal(false);
                             setPrize(newPrize);
@@ -118,7 +120,7 @@ export default function LootboxModal(props: {
                                     className="flex justify-between items-center bg-gray-600 p-3 rounded-lg hover:bg-gray-500 transition-colors"
                                 >
                                     <span className="text-gray-300">
-                                        {prize.name} <span className="text-green-400">({prize.quality})</span>
+                                        {prize.name} - {Math.round(prize.tokens_amount)} T <span className="text-green-400">({prize.quality})</span>
                                     </span>
                                     <span className="text-gray-400 text-sm">
                                         {Math.round(prize.drop_chance * 100)}% chance

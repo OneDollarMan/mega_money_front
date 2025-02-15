@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./mega_money
+      dockerfile: Dockerfile
+    container_name: mega_money_frontend
+    expose:
+      - "3000"
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    external: true

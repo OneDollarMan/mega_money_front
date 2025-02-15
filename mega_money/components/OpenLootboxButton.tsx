@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 import { useAuth } from "./AuthContext";
 import { Prize } from "./Models";
 
-export default function OpenLootboxButton(props: { selectedLootboxId: number, setPrize: (newPrize: Prize) => void, setError: Dispatch<SetStateAction<string | undefined>> }) {
+export default function OpenLootboxButton(props: { lootboxId: number, lootboxPrice: number, setPrize: (newPrize: Prize) => void, setError: Dispatch<SetStateAction<string | undefined>> }) {
     const { accessToken, logout, refreshUserBalance } = useAuth();
 
     const openLootbox = async () => {
@@ -17,7 +17,7 @@ export default function OpenLootboxButton(props: { selectedLootboxId: number, se
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + accessToken,
             },
-            body: JSON.stringify({ id: props.selectedLootboxId }),
+            body: JSON.stringify({ id: props.lootboxId }),
         });
         if (response.status == 401) {
             logout();
@@ -41,7 +41,7 @@ export default function OpenLootboxButton(props: { selectedLootboxId: number, se
             onClick={openLootbox}
             disabled={!accessToken}
         >
-            {accessToken ? 'Open lootbox' : 'Authorize first!'}
+            {accessToken ? `Open lootbox (${Math.round(props.lootboxPrice)} T)` : 'Authorize first!'}
         </button>
     );
 }

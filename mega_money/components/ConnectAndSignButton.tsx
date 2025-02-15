@@ -79,7 +79,7 @@ export const ConnectAndSignButton = () => {
                     onClick={connect}
                     className="bg-gradient-to-r from-green-400 to-teal-500 text-white font-bold py-2 px-6 rounded-lg hover:from-teal-500 hover:to-green-400 hover:shadow-lg transform transition-all hover:scale-105 active:scale-95"
                 >
-                    {connecting ? "Connecting..." : "Connect Wallet"}
+                    {connecting ? "Connecting..." : "Connect via Metamask"}
                 </button>
             )}
         </div>

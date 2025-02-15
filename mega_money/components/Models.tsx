@@ -6,11 +6,18 @@ export enum PrizeQualityEnum {
     legendary = 'Legendary'
 }
 
+export enum PrizeTypeEnum {
+    TOKENS = 'Tokens',
+    NFT = 'NFT'
+}
+
 export interface Prize {
     id: number;
     name: string;
     quality: PrizeQualityEnum;
     drop_chance: number;
+    type: PrizeTypeEnum;
+    tokens_amount: number;
 }
 
 export interface LootboxInfo {
