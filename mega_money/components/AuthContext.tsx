@@ -1,5 +1,6 @@
 "use client"
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { BACK_ROOT_PATH } from "./config";
 
 interface AuthContextProps {
     accessToken: string | null;
@@ -52,7 +53,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const refreshUserBalance = async () => {
         try {
-            const response = await fetch('http://localhost:8000/users/me', {
+            const response = await fetch(`${BACK_ROOT_PATH}/users/me`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

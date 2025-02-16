@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSDK } from "@metamask/sdk-react";
 import { useAuth } from "./AuthContext";
+import { BACK_ROOT_PATH } from "./config";
 
 export const ConnectAndSignButton = () => {
     const { sdk, connecting, provider } = useSDK();
@@ -24,7 +25,7 @@ export const ConnectAndSignButton = () => {
                 msg: "Authenticate on NFT lootboxes",
             });
 
-            const response = await fetch('http://localhost:8000/auth/verify', {
+            const response = await fetch(`${BACK_ROOT_PATH}/auth/verify`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

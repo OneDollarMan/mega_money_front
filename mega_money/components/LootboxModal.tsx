@@ -1,5 +1,5 @@
 import { MouseEventHandler, useState, useEffect } from "react";
-import { LootboxInfo, Prize, PrizeTypeEnum } from "./Models";
+import { LootboxInfo, Prize } from "./Models";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Trophy } from "lucide-react";
 import OpenLootboxButton from "./OpenLootboxButton";

@@ -1,0 +1,1 @@
+export const BACK_ROOT_PATH = '/api'

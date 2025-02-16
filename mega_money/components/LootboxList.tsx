@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import LootboxModal from "@/components/LootboxModal";
 import { LootboxInfo } from "./Models";
+import { BACK_ROOT_PATH } from "./config";
 
 async function loadLootboxes() {
-    const response = await fetch('http://localhost:8000/lootboxes', {
+    const response = await fetch(`${BACK_ROOT_PATH}/lootboxes`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

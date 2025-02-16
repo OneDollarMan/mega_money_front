@@ -2,6 +2,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { useAuth } from "./AuthContext";
 import { Prize } from "./Models";
+import { BACK_ROOT_PATH } from "./config";
 
 export default function OpenLootboxButton(props: { lootboxId: number, lootboxPrice: number, setPrize: (newPrize: Prize) => void, setError: Dispatch<SetStateAction<string | undefined>> }) {
     const { accessToken, logout, refreshUserBalance } = useAuth();
@@ -11,7 +12,7 @@ export default function OpenLootboxButton(props: { lootboxId: number, lootboxPri
             return;
         }
 
-        const response = await fetch('http://localhost:8000/lootboxes/open', {
+        const response = await fetch(`${BACK_ROOT_PATH}/lootboxes/open`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
