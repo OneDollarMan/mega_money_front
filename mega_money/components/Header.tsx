@@ -9,7 +9,7 @@ export default function Header() {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-teal-500 bg-clip-text text-transparent">
                     NFT Lootboxes
                 </h1>
-                <TonConnectUIProvider manifestUrl="http://191.96.11.165/tonconnect-manifest.json">
+                <TonConnectUIProvider manifestUrl="http://191.96.11.165/static/frontend/tonconnect-manifest.json">
                     <ConnectAndSignButton />
                 </TonConnectUIProvider>
             </div>
