@@ -1,1 +1,1 @@
-export const BACK_ROOT_PATH = '/api'
+export const BACKEND_ROOT_PATH = process.env.NEXT_PUBLIC_BACKEND_ROOT_PATH;

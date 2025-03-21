@@ -3,7 +3,7 @@ services:
     build:
       context: ./mega_money
       dockerfile: Dockerfile
-    container_name: mega_money_frontend
+    container_name: frontend
     expose:
       - "3000"
     networks:

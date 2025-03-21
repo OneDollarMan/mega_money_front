@@ -1,3 +1,5 @@
+import { TonProofItemReplySuccess } from "@tonconnect/ui-react";
+
 export enum PrizeQualityEnum {
     common = 'Common',
     uncommon = 'Uncommon',
@@ -26,4 +28,9 @@ export interface LootboxInfo {
     image_url: string;
     open_price: number;
     prizes: Array<Prize>;
+}
+
+export interface TonProofBody extends TonProofItemReplySuccess {
+    address: string;
+    publicKey?: string;
 }

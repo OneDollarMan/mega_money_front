@@ -1,22 +1,13 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+"use client"
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/AuthContext";
+import { TonConnectUIProvider } from "@tonconnect/ui-react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "NFT Cases",
-  description: "Gamble your free NFT lootboxes",
-};
 
 export default function RootLayout({
   children,
@@ -25,12 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+      <body className={`${inter.variable} font-sans antialiased`}>
+        <TonConnectUIProvider manifestUrl="http://191.96.11.165/static/frontend/tonconnect-manifest.json">
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </TonConnectUIProvider>
       </body>
     </html>
   );
