@@ -2,7 +2,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { useAuth } from "./AuthContext";
 import { Prize } from "./Models";
-import { BACK_ROOT_PATH } from "./config";
+import { BACKEND_ROOT_PATH } from "./config";
 
 export default function OpenLootboxButton(props: { lootboxId: number, lootboxPrice: number, setPrize: (newPrize: Prize) => void, setError: Dispatch<SetStateAction<string | undefined>> }) {
     const { accessToken, logout, refreshUserBalance } = useAuth();
@@ -12,7 +12,7 @@ export default function OpenLootboxButton(props: { lootboxId: number, lootboxPri
             return;
         }
 
-        const response = await fetch(`${BACK_ROOT_PATH}/lootboxes/open`, {
+        const response = await fetch(`${BACKEND_ROOT_PATH}/lootboxes/open`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -21,12 +21,13 @@ export default function OpenLootboxButton(props: { lootboxId: number, lootboxPri
             body: JSON.stringify({ id: props.lootboxId }),
         });
         if (response.status == 401) {
+            props.setError((await response.json()).detail);
             logout();
             return;
         }
 
         if (response.status == 400) {
-            props.setError((await response.json()).detail)
+            props.setError((await response.json()).detail);
             return;
         }
 

@@ -4,9 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Trophy } from "lucide-react";
 import OpenLootboxButton from "./OpenLootboxButton";
 
-export default function LootboxModal(props: { 
-    selectedLootbox: LootboxInfo | null, 
-    closeModalFunc: MouseEventHandler 
+export default function LootboxModal(props: {
+    selectedLootbox: LootboxInfo | null,
+    closeModalFunc: MouseEventHandler
 }) {
     const [prize, setPrize] = useState<Prize>();
     const [error, setError] = useState<string>();
@@ -21,7 +21,7 @@ export default function LootboxModal(props: {
     if (props.selectedLootbox == null) {
         return null;
     }
-    
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 animate-fade-in">
             <div className="bg-gray-800 rounded-lg p-8 w-full max-w-lg relative transform transition-all">
@@ -42,7 +42,7 @@ export default function LootboxModal(props: {
                 <div className="bg-gray-700 h-48 rounded-lg mb-6 flex items-center justify-center overflow-hidden relative">
                     <AnimatePresence>
                         {!showPrizeReveal ? (
-                            <motion.div 
+                            <motion.div
                                 className="absolute inset-0 flex items-center justify-center"
                                 initial={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
@@ -52,7 +52,7 @@ export default function LootboxModal(props: {
                                 </span>
                             </motion.div>
                         ) : (
-                            <motion.div 
+                            <motion.div
                                 className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-r from-purple-900/50 to-indigo-900/50"
                                 initial={{ scale: 0.5, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
@@ -98,13 +98,13 @@ export default function LootboxModal(props: {
 
                 {/* Open Lootbox Button */}
                 <div className="mb-6">
-                    <OpenLootboxButton 
-                        lootboxId={props.selectedLootbox.id} 
+                    <OpenLootboxButton
+                        lootboxId={props.selectedLootbox.id}
                         lootboxPrice={props.selectedLootbox.open_price}
                         setPrize={(newPrize: Prize) => {
                             setShowPrizeReveal(false);
                             setPrize(newPrize);
-                        }} 
+                        }}
                         setError={setError}
                     />
                 </div>

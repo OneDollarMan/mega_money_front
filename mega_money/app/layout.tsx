@@ -1,17 +1,13 @@
-import type { Metadata } from "next";
+"use client"
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/AuthContext";
+import { TonConnectUIProvider } from "@tonconnect/ui-react";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
-
-export const metadata: Metadata = {
-  title: "NFT Cases",
-  description: "Gamble your free NFT lootboxes",
-};
 
 export default function RootLayout({
   children,
@@ -21,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <TonConnectUIProvider manifestUrl="http://191.96.11.165/static/frontend/tonconnect-manifest.json">
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </TonConnectUIProvider>
       </body>
     </html>
   );
