@@ -26,7 +26,7 @@ export const ConnectAndSignButton = () => {
             });
         }
         fetchPayload();
-    }, []);
+    }, [tonConnectUI]);
 
     return (
         <TonConnectButton />
